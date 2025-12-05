@@ -12,13 +12,24 @@ public class task_3 {
         int a = 0;
         int b = 1;
 
-        for (int i = 0; i < size; i++) {
+//        for (int i = 0; i < size; i++) {
+//            int next = a + b;
+//            a = b;
+//            b = next;
+//
+//            System.out.println(next);
+//
+//        }
+
+        int i = 0;
+
+        while (i < size) {
+            i++;
             int next = a + b;
             a = b;
             b = next;
 
             System.out.println(next);
-
         }
 
 
