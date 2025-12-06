@@ -31,10 +31,7 @@ public class task_5 {
             i++;
         }
 
-
         System.out.println("Сумма = " + sum);
-
-
 
     }
 }
