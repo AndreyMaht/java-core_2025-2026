@@ -12,13 +12,25 @@ public class task_5 {
         int count = 0;
         int sum = 0;
 
-        for (int i = 1; count < n; i++) {
+//        for (int i = 1; count < n; i++) {
+//            if (i % 5 == 2 || i % 3 == 1) {
+//                System.out.print(i + " ");
+//                sum += i;
+//                count++;
+//            }
+//        }
+
+        int i = 1;
+
+        while (count < n) {
             if (i % 5 == 2 || i % 3 == 1) {
-                System.out.print(i + " ");
+                System.out.println(i + " подходит");
                 sum += i;
                 count++;
             }
+            i++;
         }
+
 
         System.out.println("Сумма = " + sum);
 
