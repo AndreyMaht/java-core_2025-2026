@@ -35,9 +35,5 @@ public class task_6 {
             System.out.println("Введенно некорректное значение");
         }
 
-
-
-
-
     }
 }
