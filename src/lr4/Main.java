@@ -9,13 +9,13 @@ public class Main {
         int z;
 
         for (i=1; i<= figure; i++) {
-            System.out.println("number string: " + i + " ");
+            System.out.print("number string: " + i + " ");
             z = 0;
             for (j = -5; j < figure; j++) {
-                System.out.println("+");
+                System.out.print("+");
                 z = z + 1;
             }
-            System.out.println("Количество символов в строке" + z);
+            System.out.print("Количество символов в строке" + z);
         }
 
     }
