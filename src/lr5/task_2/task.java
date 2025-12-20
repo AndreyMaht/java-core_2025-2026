@@ -11,7 +11,6 @@ public class task {
                 System.out.print((char) i + " ");
             }
         } else {
-            // Если start > end, идем в обратном порядке
             for (int i = a; i >= b; i--) {
                 System.out.print((char) i + " ");
             }
