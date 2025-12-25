@@ -1,6 +1,5 @@
-package Timus.task_1000;
+package Timus.task_2000;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class task_2056 {
