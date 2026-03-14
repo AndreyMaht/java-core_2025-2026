@@ -1,4 +1,4 @@
-package lr9;
+package lr9.task_4;
 
 public class Test2 {
     public static void main(String[] args) {
