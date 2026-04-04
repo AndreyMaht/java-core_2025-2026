@@ -16,9 +16,9 @@ public class JsonCreator {
         book1.put("year", 1869);
 
         JSONObject book2 = new JSONObject();
-        book1.put("title", "Мастер и Маргарита");
-        book1.put("author", "Михаил Булгаков");
-        book1.put("year", 1967);
+        book2.put("title", "Мастер и Маргарита");
+        book2.put("author", "Михаил Булгаков");
+        book2.put("year", 1967);
 
         books.add(book1);
         books.add(book2);

@@ -8,7 +8,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class CurrencyParser {
-
     public static void main(String[] args) {
         try {
             // Подключаемся к сайту
