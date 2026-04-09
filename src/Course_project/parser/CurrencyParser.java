@@ -54,11 +54,11 @@ public class CurrencyParser {
         String dateStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
         String fileName = "rates_" + dateStr + ".xlsx";
 
-        String filePath = "src/Course_project/parser/" + fileName;
-        FileOutputStream fos = new FileOutputStream(filePath);
-        workbook.write(fos);
+        String filePath = fileName;
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            workbook.write(fos);
+        }
         workbook.close();
-        fos.close();
 
         System.out.println("Данные записаны в файл: " + filePath);
     }
