@@ -34,6 +34,5 @@ public class WriteExcelFileExample {
         outputStream.close();
 
         System.out.println("Данные записаны в файл: " + filePath);
-
     }
 }
