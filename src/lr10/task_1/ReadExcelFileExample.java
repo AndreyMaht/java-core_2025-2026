@@ -12,7 +12,6 @@ public class ReadExcelFileExample {
         FileInputStream inputStream = new FileInputStream(filePath);
 
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-
         XSSFSheet sheet = workbook.getSheet("Товары");
 
         for (Row row : sheet) {

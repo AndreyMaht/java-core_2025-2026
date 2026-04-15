@@ -3,6 +3,8 @@ package Course_project.parser;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +14,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.imageio.IIOException;
 import java.io.IOException;
 
 public class CurrencyParser {
@@ -63,6 +66,29 @@ public class CurrencyParser {
         System.out.println("Данные записаны в файл: " + filePath);
     }
 
+    public static void readExcelFile (String filePath, String currencyCode) throws IOException{
+
+        try {
+            FileInputStream inputStream = new FileInputStream(filePath);
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("Курсы валют");
+
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    System.out.println(cell.getStringCellValue() + "\t");
+                }
+                System.out.println();
+            }
+
+            workbook.close();
+            inputStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public static void main(String[] args) {
         try {
             // Подключаемся к сайту
@@ -86,6 +112,7 @@ public class CurrencyParser {
             }
 
             exportToExcel(rows);
+            //readExcelFile();
 
         } catch (IOException e) {
             System.out.println("Ошибка: " + e.getMessage());
