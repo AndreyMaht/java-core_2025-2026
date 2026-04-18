@@ -3,6 +3,11 @@ package Course_project.parser;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -66,27 +71,35 @@ public class CurrencyParser {
         System.out.println("Данные записаны в файл: " + filePath);
     }
 
-    public static void readExcelFile (String filePath, String currencyCode) throws IOException{
+    public static Map<String, String> readExcelFile(String filePath) throws IOException {
 
-        try {
-            FileInputStream inputStream = new FileInputStream(filePath);
-            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            XSSFSheet sheet = workbook.getSheet("Курсы валют");
+        Map<String, String> rates = new HashMap<>();
+        File file = new File(filePath);
 
-            for (Row row : sheet) {
-                for (Cell cell : row) {
-                    System.out.println(cell.getStringCellValue() + "\t");
-                }
-                System.out.println();
-            }
-
-            workbook.close();
-            inputStream.close();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!file.exists()) {
+            return rates; // файл ещё не создан
         }
 
+        FileInputStream inputStream = new FileInputStream(file);
+        XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        XSSFSheet sheet = workbook.getSheet("Курсы валют");
+
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) continue; // пропускаем заголовок
+
+            Cell codeCell = row.getCell(0);
+            Cell valueCell = row.getCell(2);
+
+            if (codeCell != null && valueCell != null) {
+                rates.put(codeCell.getStringCellValue(), valueCell.getStringCellValue());
+            }
+
+        }
+
+        workbook.close();
+        inputStream.close();
+
+        return rates;
     }
 
     public static void main(String[] args) {
@@ -99,6 +112,8 @@ public class CurrencyParser {
             // Находим таблицу с курсами
             Elements rows = doc.select("table.data tr");
 
+            Map<String, String> newRates = new HashMap<>();
+
             // Проходим по строкам
             for (Element row : rows) {
                 Elements cols = row.select("td");
@@ -107,11 +122,43 @@ public class CurrencyParser {
                     String charCode = cols.get(1).text();
                     String name = cols.get(3).text();
                     String value = cols.get(4).text();
+
+                    newRates.put(charCode, value);
+
                     System.out.println(charCode + " | " + name + " | " + value);
                 }
             }
 
-            exportToExcel(rows);
+            String fileName = "rates.xlsx";
+            Map<String, String> oldRates = readExcelFile(fileName);
+
+            boolean hasChanges = false;
+
+            for (String code : newRates.keySet()) {
+                String oldValue = oldRates.get(code);
+                String newValue = newRates.get(code);
+
+                if (oldValue == null) {
+                    System.out.println("Новая валюта: " + code);
+                    hasChanges = true;
+                } else if (!oldValue.equals(newValue)) {
+                    System.out.println("Изменение: " + code +
+                            " было: " + oldValue +
+                            " стало: " + newValue);
+                    hasChanges = true;
+                }
+
+            }
+
+            if (oldRates.isEmpty()) {
+                System.out.println("Первый запуск — создаём файл");
+                exportToExcel(rows);
+            } else if (hasChanges) {
+                System.out.println("Курсы изменились — обновляем файл");
+                exportToExcel(rows);
+            } else {
+                System.out.println("Изменений нет");
+            }
             //readExcelFile();
 
         } catch (IOException e) {
