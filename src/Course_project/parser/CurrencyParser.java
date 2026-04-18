@@ -103,6 +103,12 @@ public class CurrencyParser {
     }
 
     public static void main(String[] args) {
+
+        Scanner in = new Scanner(System.in);
+        System.out.println("Введите код валюты (USD, EUR и т.д.) или 'all' для всех: ");
+        String userChoice = in.nextLine();
+        userChoice = userChoice.toUpperCase();
+
         try {
             // Подключаемся к сайту
             Document doc = Jsoup.connect("https://www.cbr.ru/currency_base/daily/")
@@ -125,7 +131,9 @@ public class CurrencyParser {
 
                     newRates.put(charCode, value);
 
-                    System.out.println(charCode + " | " + name + " | " + value);
+                    if (userChoice.equals("ALL") || userChoice.equals(charCode)) {
+                        System.out.println(charCode + " | " + name + " | " + value);
+                    }
                 }
             }
 
@@ -135,6 +143,9 @@ public class CurrencyParser {
             boolean hasChanges = false;
 
             for (String code : newRates.keySet()) {
+                if (!userChoice.equals("ALL") && !code.equals(userChoice)) {
+                    continue;
+                }
                 String oldValue = oldRates.get(code);
                 String newValue = newRates.get(code);
 
@@ -168,5 +179,6 @@ public class CurrencyParser {
         } catch (IOException e) {
             System.out.println("Ошибка: " + e.getMessage());
         }
+        in.close();
     }
 }
