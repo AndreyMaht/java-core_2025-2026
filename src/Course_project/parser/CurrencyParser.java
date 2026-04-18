@@ -60,7 +60,7 @@ public class CurrencyParser {
 
         LocalDate today = LocalDate.now();
         String dateStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        String fileName = "rates_" + dateStr + ".xlsx";
+        String fileName = "rates.xlsx";
 
         String filePath = fileName;
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
@@ -142,9 +142,13 @@ public class CurrencyParser {
                     System.out.println("Новая валюта: " + code);
                     hasChanges = true;
                 } else if (!oldValue.equals(newValue)) {
-                    System.out.println("Изменение: " + code +
-                            " было: " + oldValue +
-                            " стало: " + newValue);
+                    double oldVal = Double.parseDouble(oldValue.replace(",", "."));
+                    double newVal = Double.parseDouble(newValue.replace(",", "."));
+
+                    double diff = ((newVal - oldVal) / oldVal) * 100;
+
+                    System.out.printf("Изменение: %s было: %s стало: %s (%.2f%%)%n",
+                            code, oldValue, newValue, diff);
                     hasChanges = true;
                 }
 
