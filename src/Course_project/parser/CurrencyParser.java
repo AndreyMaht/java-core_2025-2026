@@ -102,11 +102,13 @@ public class CurrencyParser {
         return rates;
     }
 
-    public static void main(String[] args) {
+    public static String parseAndCompare(String userChoice) {
 
-        Scanner in = new Scanner(System.in);
+        StringBuilder result = new StringBuilder();
+
+
         System.out.println("Введите код валюты (USD, EUR и т.д.) или 'all' для всех: ");
-        String userChoice = in.nextLine();
+        //String userChoice = in.nextLine();
         userChoice = userChoice.toUpperCase();
 
         try {
@@ -132,7 +134,7 @@ public class CurrencyParser {
                     newRates.put(charCode, value);
 
                     if (userChoice.equals("ALL") || userChoice.equals(charCode)) {
-                        System.out.println(charCode + " | " + name + " | " + value);
+                        result.append(charCode).append(" | ").append(name).append(" | ").append(value).append("\n");
                     }
                 }
             }
@@ -150,7 +152,7 @@ public class CurrencyParser {
                 String newValue = newRates.get(code);
 
                 if (oldValue == null) {
-                    System.out.println("Новая валюта: " + code);
+                    result.append("Новая валюта: ").append(code).append("\n");
                     hasChanges = true;
                 } else if (!oldValue.equals(newValue)) {
                     double oldVal = Double.parseDouble(oldValue.replace(",", "."));
@@ -158,27 +160,46 @@ public class CurrencyParser {
 
                     double diff = ((newVal - oldVal) / oldVal) * 100;
 
-                    System.out.printf("Изменение: %s было: %s стало: %s (%.2f%%)%n",
-                            code, oldValue, newValue, diff);
+                    result.append(String.format("Изменение: %s было: %s стало: %s (%.2f%%)%n",
+                            code, oldValue, newValue, diff));
+
+                    //System.out.printf();
                     hasChanges = true;
                 }
 
             }
 
             if (oldRates.isEmpty()) {
-                System.out.println("Первый запуск — создаём файл");
+                result.append("Первый запуск — создаём файл\n");
                 exportToExcel(rows);
             } else if (hasChanges) {
-                System.out.println("Курсы изменились — обновляем файл");
+                result.append("Курсы изменились — обновляем файл\n");
                 exportToExcel(rows);
             } else {
-                System.out.println("Изменений нет");
+                result.append("Изменений нет\n");
             }
+
             //readExcelFile();
 
         } catch (IOException e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            result.append("Ошибка: ").append(e.getMessage()).append("\n");
         }
-        in.close();
+
+        return result.toString();
+
+
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите код валюты (USD, EUR и т.д.) или 'all' для всех: ");
+        String userChoice = scanner.nextLine().trim().toUpperCase();
+        scanner.close();
+
+        String result = parseAndCompare(userChoice);
+        System.out.println(result);
+
     }
 }
