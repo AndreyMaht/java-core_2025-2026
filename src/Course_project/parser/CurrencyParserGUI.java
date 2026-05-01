@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Desktop;
+import javax.swing.JOptionPane;
 
 public class CurrencyParserGUI {
     public static void main(String[] args) {
@@ -21,18 +25,25 @@ public class CurrencyParserGUI {
             frame.setLocationRelativeTo(null);
 
             JTextField currencyField = new JTextField(10);
+
             JButton parseButton = new JButton("Получить курсы");
             parseButton.setPreferredSize(new Dimension(150, 40));
+            parseButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            JButton openFileButton = new JButton("Открыть Excel");
+            openFileButton.setPreferredSize(new Dimension(150, 40));
+            openFileButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
             //parseButton.setMargin(new Insets(10, 20, 10, 20));
             JTextArea resultArea = new JTextArea(15,40);
             resultArea.setEditable(false);
-            resultArea.setFont(new Font("Menlo", Font.PLAIN, 16));
+            resultArea.setFont(new Font("Segoe UI", Font.PLAIN, 16));
             JScrollPane scrollPane = new JScrollPane(resultArea);
 
             JPanel topPanel = new JPanel();
             topPanel.add(new JLabel("Код валюты (USD, EUR, all):"));
             topPanel.add(currencyField);
             topPanel.add(parseButton);
+            topPanel.add(openFileButton);
 
             frame.add(topPanel, BorderLayout.NORTH);
             frame.add(scrollPane, BorderLayout.CENTER);
@@ -49,6 +60,23 @@ public class CurrencyParserGUI {
                     String result = CurrencyParser.parseAndCompare(userInput);
 
                     resultArea.setText("Вы ввели: " + result);
+                }
+            });
+
+            openFileButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    File file = new File("rates.xlsx");
+
+                    if (file.exists()) {
+                        try {
+                            Desktop.getDesktop().open(file);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Файл rates.xlsx ещё не создан.", "Ошибка", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             });
 
