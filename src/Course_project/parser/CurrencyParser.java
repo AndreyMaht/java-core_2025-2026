@@ -70,21 +70,42 @@ public class CurrencyParser {
 
                     double diff = ((newVal - oldVal) / oldVal) * 100;
 
-                    result.append(String.format("Изменение: %s было: %s стало: %s (%.2f%%)%n",
-                            code, oldValue, newValue, diff));
+
+
+                    String arrow;
+                    String color;
+
+                    if (diff > 0) {
+                        arrow = "📈";
+                        color = "green";
+                    } else {
+                        arrow = "📉";
+                        color = "red";
+                    }
+
+                    result.append(String.format(
+                            "<html>%s <b>%s</b>: было %s → стало %s " +
+                                    "<span style='color:%s;'>(%.2f%%)</span><br></html>",
+                            arrow,
+                            code,
+                            oldValue,
+                            newValue,
+                            color,
+                            diff
+                    ));
 
                     hasChanges = true;
                 }
             }
 
             if (oldRates.isEmpty()) {
-                result.append("Первый запуск — создаём файл\n");
+                result.append("Первый запуск — создаём файл");
                 ExcelService.exportToExcel(currencies);
             } else if (hasChanges) {
-                result.append("Курсы изменились — обновляем файл\n");
+                result.append("Курсы изменились — обновляем файл");
                 ExcelService.exportToExcel(currencies);
             } else {
-                result.append("Изменений нет\n");
+                result.append("Изменений нет");
             }
 
         } catch (IOException e) {

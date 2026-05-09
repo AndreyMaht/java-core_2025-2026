@@ -33,11 +33,16 @@ public class CurrencyParserGUI {
             openFileButton.setPreferredSize(new Dimension(150, 40));
             openFileButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
-            //parseButton.setMargin(new Insets(10, 20, 10, 20));
-            JTextArea resultArea = new JTextArea(15,40);
-            resultArea.setEditable(false);
-            resultArea.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            JScrollPane scrollPane = new JScrollPane(resultArea);
+            JTextPane resultPane = new JTextPane();
+            resultPane.setEditable(false);
+            resultPane.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            resultPane.setContentType("text/html");
+            resultPane.setBackground(new Color(245,245,245));
+            resultPane.setBorder(
+                    BorderFactory.createEmptyBorder(10,10,10,10)
+            );
+
+            JScrollPane scrollPane = new JScrollPane(resultPane);
 
             JPanel topPanel = new JPanel();
             topPanel.add(new JLabel("Код валюты (USD, EUR, all):"));
@@ -53,13 +58,20 @@ public class CurrencyParserGUI {
                 public void actionPerformed(ActionEvent e) {
                     String userInput = currencyField.getText().trim();
                     if (userInput.isEmpty()) {
-                        resultArea.setText("Введите код валюты или all");
+                        resultPane.setText("Введите код валюты или all");
                         return;
                     }
 
-                    String result = CurrencyParser.parseAndCompare(userInput);
+                    String plainResult = CurrencyParser.parseAndCompare(userInput);
 
-                    resultArea.setText("Вы ввели: " + result);
+                    String escaped = plainResult.replace("&", "&amp;")
+                            .replace("<", "&lt;")
+                            .replace(">", "&gt;")
+                            .replace("\n", "<br/>");
+                    String htmlResult = "<html><body style='font-family: Segoe UI, sans-serif; font-size: 16px;'>"
+                            + escaped
+                            + "</body></html>";
+                    resultPane.setText(htmlResult);
                 }
             });
 
