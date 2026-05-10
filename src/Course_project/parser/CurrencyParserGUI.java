@@ -23,6 +23,7 @@ public class CurrencyParserGUI {
             frame.setSize(800,600);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
+            frame.setTitle("Currency Parser");
 
             JTextField currencyField = new JTextField(10);
 
@@ -62,16 +63,10 @@ public class CurrencyParserGUI {
                         return;
                     }
 
-                    String plainResult = CurrencyParser.parseAndCompare(userInput);
+                    String result = CurrencyParser.parseAndCompare(userInput);
 
-                    String escaped = plainResult.replace("&", "&amp;")
-                            .replace("<", "&lt;")
-                            .replace(">", "&gt;")
-                            .replace("\n", "<br/>");
-                    String htmlResult = "<html><body style='font-family: Segoe UI, sans-serif; font-size: 16px;'>"
-                            + escaped
-                            + "</body></html>";
-                    resultPane.setText(htmlResult);
+
+                    resultPane.setText(result);
                 }
             });
 

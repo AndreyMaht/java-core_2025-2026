@@ -18,6 +18,8 @@ public class CurrencyParser {
 
         StringBuilder result = new StringBuilder();
 
+        result.append("<html><body style='font-family:Segoe UI; font-size:16px;'>");
+
         System.out.println("Введите код валюты (USD, EUR и т.д.) или 'all' для всех: ");
         userChoice = userChoice.toUpperCase();
 
@@ -44,7 +46,7 @@ public class CurrencyParser {
                     newRates.put(charCode, value);
 
                     if (userChoice.equals("ALL") || userChoice.equals(charCode)) {
-                        result.append(charCode).append(" | ").append(name).append(" | ").append(value).append("\n");
+                        result.append(charCode).append(" | ").append(name).append(" | ").append(value).append(" руб").append("<br>");
                     }
                 }
             }
@@ -62,7 +64,7 @@ public class CurrencyParser {
                 String newValue = newRates.get(code);
 
                 if (oldValue == null) {
-                    result.append("Новая валюта: ").append(code).append("\n");
+                    result.append("Новая валюта: ").append(code).append("<br>");
                     hasChanges = true;
                 } else if (!oldValue.equals(newValue)) {
                     double oldVal = Double.parseDouble(oldValue.replace(",", "."));
@@ -84,8 +86,8 @@ public class CurrencyParser {
                     }
 
                     result.append(String.format(
-                            "<html>%s <b>%s</b>: было %s → стало %s " +
-                                    "<span style='color:%s;'>(%.2f%%)</span><br></html>",
+                            "%s <b>%s</b>: было %s → стало %s " +
+                                    "<span style='color:%s;'>(%.2f%%)</span><br>",
                             arrow,
                             code,
                             oldValue,
@@ -111,6 +113,8 @@ public class CurrencyParser {
         } catch (IOException e) {
             result.append("Ошибка: ").append(e.getMessage()).append("\n");
         }
+
+        result.append("</body></html>");
 
         return result.toString();
 
