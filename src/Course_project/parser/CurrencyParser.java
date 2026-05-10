@@ -72,8 +72,6 @@ public class CurrencyParser {
 
                     double diff = ((newVal - oldVal) / oldVal) * 100;
 
-
-
                     String arrow;
                     String color;
 
