@@ -65,10 +65,21 @@ public class ExcelService {
             Cell codeCell = row.getCell(0);
             Cell valueCell = row.getCell(2);
 
-            rates.put(
-                    codeCell.getStringCellValue(),
-                    valueCell.getStringCellValue()
-            );
+            String code = codeCell.getStringCellValue();
+
+            String value;
+
+            if (valueCell.getCellType() == CellType.NUMERIC) {
+
+                value = String.valueOf(valueCell.getNumericCellValue());
+
+            } else {
+
+                value = valueCell.getStringCellValue();
+
+            }
+
+            rates.put(code, value);
         }
 
         workbook.close();
